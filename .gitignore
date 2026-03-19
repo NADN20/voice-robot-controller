@@ -1,0 +1,14 @@
+picovoice
+pvrecorder_tutorial
+
+*.o
+*.out
+
+.vscode/
+
+porcupine/resources/.test/
+porcupine/resources/.lint/
+
+*.log
+
+whisper/whisper.cpp/models/ggml-base.en.bin
