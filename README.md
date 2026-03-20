@@ -12,7 +12,7 @@ Instead, it should wait for a wake word first, then listen to a short command, c
 
 The current task of this project is to implement this voice pipeline:
 
-`A2rbot` wake word -> listen for 5 seconds -> convert speech to text -> return to sleep
+`A2rbot` wake word -> capture voice command -> Whisper speech-to-text -> rule-based parser or LLM -> validator -> robot action
 
 ## Desired final behavior
 
@@ -20,7 +20,9 @@ The current task of this project is to implement this voice pipeline:
 - Porcupine listens for the wake word.
 - When the wake word is detected, the robot records a short command window.
 - Whisper converts the recorded audio to text.
-- That text can later be mapped to robot actions such as lock, unlock, move, stop, or other commands.
+- A rule-based parser or an LLM converts the transcript into a structured command.
+- A validator checks that the command is safe, valid, and expected.
+- The robot executes the final validated action such as lock, unlock, move, stop, or another supported command.
 
 ## Why this design
 
@@ -55,6 +57,10 @@ The current task of this project is to implement this voice pipeline:
 ## Current flow
 
 `wake word` -> `listen for 5 seconds` -> `Whisper STT` -> `print text` -> `sleep again`
+
+## Target pipeline
+
+`wake word` -> `capture` -> `Whisper` -> `rule-based parser or LLM` -> `validator` -> `robot action`
 
 ## Configuration
 
@@ -167,7 +173,13 @@ fprintf(stdout, "Selected device: %s.\n", selected_device);
 
 ## Next goal
 
-The next development step is to take the Whisper transcript and map it to real robot actions.
+The next development step is to extend the current pipeline after Whisper.
+Instead of only printing the transcript, the system should:
+
+- pass the transcript into a rule-based parser or an LLM
+- convert the text into a structured command or JSON intent
+- validate the parsed result
+- execute the final robot action only if the output is valid
 
 Examples:
 - `"lock the robot"`
